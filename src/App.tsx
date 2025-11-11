@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { type Task, type TaskStatus } from "./components/TaskList/TaskItem";
 import TaskList from "./components/TaskList/TaskList";
 import "./App.css";
+import TaskForm from "./components/TaskForm/TaskForm";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([
@@ -81,7 +82,6 @@ function App() {
   function setStatus(e: React.ChangeEvent<HTMLSelectElement>, task: Task) {
     let newStatus = e.target.value as TaskStatus
     setTasks(prev => prev.map(item => item.status === task.status ? { ...item, status: newStatus } : item))
-    //filterByStatus(e)
   }
   function filterByStatus(e: React.ChangeEvent<HTMLSelectElement>) {
     if (e.target.value != 'all') {
@@ -92,41 +92,22 @@ function App() {
       setCopiedTasks(tasks)
     }
   }
+  function addTask(newTask: Task) {
+    setTasks((prev) => [...prev, newTask]);
+  }
 
   const listOfTasks = tasksCopy.map(task =>
     <TaskList key={task.id} task={task} priorityColor={setPriorityColor(task)}
       dropdownColor={setDropdownColor(task)} onStatusChange={(e) => setStatus(e, task)} onDelete={() => onDelete(task)} />
   )
-  // const taskList = tasks.map(task =>
-  //   <div key={task.id} className="w-full bg-[#000000] border-[2px] border-[#364153] rounded-[8px] p-[10px] text-left p-[20px] mb-[15px]">
-  //     <div className="flex justify-between">
-  //       <div className="ml-[25px]">
-  //         <select defaultValue={task.status} onChange={(e) => setStatus(e, task)} style={{ backgroundColor: setDropdownColor(task) }} className="px-[5px] text-[18px] h-[30px] text-[#ab4b00] rounded-[4px]" name="" id="">
-  //           <option value="pending">Pending</option>
-  //           <option value="in-progress">In Progress</option>
-  //           <option value="completed">Completed</option>
-  //         </select>
-  //         <button className="text-[#cb2c36] ml-[10px]" onClick={() => onDelete(task)}>Delete</button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // )
 
   return (
     <>
-    <section className="mb-[10px]"> {/* Task Addition Section, Need: Title, Description, Status, Priority, Due Date */}
-    <form action="">
-      <label htmlFor="" className="block text-left">Task Title</label>
-      <input type="text" className="block border-[2px] rounded-full"/>
-      <label htmlFor="" className="block text-left">Task Description</label>
-      <input type="text" className="block border-[2px] rounded-full"/>
-      <input type="submit" value="Create" className="bg-[#ffee03]"/>
-    </form>
-    </section>
+      <TaskForm/>
       <div className="flex mb-[30px]">
         <div>
           <p className="text-[15px] text-left mb-[5px]">Status</p>
-          <select onChange={(e) => filterByStatus(e)} className="px-[10px] text-[18px] h-[35px] bg-[#1e2939] rounded-[4px]" name="" id="">
+          <select onChange={(e) => filterByStatus(e)} className="px-[10px] text-[18px] h-[35px] bg-[#1e2939] rounded-[4px]">
             <option value="all">All Statuses</option>
             <option value="pending">Pending</option>
             <option value="in-progress">In Progress</option>
